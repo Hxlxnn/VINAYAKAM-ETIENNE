@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Assurez-vous que le chemin vers votre fichier est correct
+# Make sure the path to your file is correct.
 filePath="data.csv"
 
 if [[ ! -f "$filePath" ]]; then
