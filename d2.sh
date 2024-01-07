@@ -27,10 +27,6 @@ fi
         tail -n 10 "./temp/sorted_d2_argument_sum.csv" >"./temp/d2_argument_top10.csv"
          cat "./temp/d2_argument_top10.csv" # to show the top 10
 
-        #echo "Creating graph..."
-        #gnuplot ./progc/gnuplot/d2_script.gnu
-        #echo -e "Done.\n"
-        #;;
-
+        
 
 
