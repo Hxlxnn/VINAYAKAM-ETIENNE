@@ -1,37 +1,34 @@
 #!/bin/bash
 
-# Make sure the path to your file is correct.
-filePath="data.csv"
-
-if [[ ! -f "$filePath" ]]; then
-    echo "Le fichier $filePath n'existe pas. Veuillez vérifier le chemin du fichier."
+# Vérification de l'existence du fichier
+cheminFichier="data.csv"
+if [[ ! -f "$cheminFichier" ]]; then
+    echo "Le fichier $cheminFichier n'existe pas. Veuillez vérifier le chemin du fichier."
     exit 1
 fi
 
-# Reste du script inchangé...
+# Création des répertoires temporaires
+repertoireTemp="./temp"
+mkdir -p "$repertoireTemp"
 
+# Déclaration des chemins des fichiers temporaires
+fichierSomme="$repertoireTemp/d1_argument_sum.csv"
+fichierTriee="$repertoireTemp/sorted_d1_argument_sum.csv"
+fichierTop10Pre="$repertoireTemp/d1_argument_top10_pre.csv"
+fichierTop10="$repertoireTemp/d1_argument_top10.csv"
 
+# Étape de traitement
+echo "d1 arg trouvé"
+echo "Somme des trajets par conducteur..."
+awk -F';' '$2 == 1 {somme[$6]+=1} END{for(i in somme) printf "%s;%d\n", i, somme[i]}' "$cheminFichier" >"$fichierSomme"
+echo "Tri des trajets par conducteur..."
+sort -t';' -k2nr "$fichierSomme" >"$fichierTriee"
+echo "Obtention des 10 conducteurs principaux..."
+head -10 "$fichierTriee" >"$fichierTop10Pre"
+sort -t';' -k2nr "$fichierTop10Pre" >"$fichierTop10"
+cat "$fichierTop10" # Affichage des 10 premiers
 
-    echo "d1 arg found"
-    # need to sort by route id or driver name
-    # count the number of different routes
-    # output the top 10 with number of routes and names
-    # make the graph
-
-    # separate in fields with ;, create an array of sum[route ID] += distance, then print each route ID with its sum (with 3 decimals)
-    echo "Summing drivers routes..."
-    # if step ID is 1, add the route to the driver names, then at the end, print the name and its route amount
-    awk -F';' '$2 == 1 {sum[$6]+=1} END{for(i in sum) printf "%s;%d\n", i, sum[i]}' "$filePath" >"./temp/d1_argument_sum.csv"
-    # sort the value from the second field (length), and only numerical, and reversed to have the longest on top
-    echo "Sorting drivers routes..."
-    sort -t';' -k2nr "./temp/d1_argument_sum.csv" >"./temp/sorted_d1_argument_sum.csv"
-    echo "Getting the top drivers..."
-    # get the top 10 longest route
-    head -10 "./temp/sorted_d1_argument_sum.csv" >"./temp/d1_argument_top10_pre.csv"
-    sort -t';' -k2nr "./temp/d1_argument_top10_pre.csv" >"./temp/d1_argument_top10.csv"
-     cat "./temp/d1_argument_top10.csv" # to show the top 10
-
-   
+# Fin du script...
 
 
 
