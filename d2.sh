@@ -21,10 +21,10 @@ fi
        LC_NUMERIC=C awk -F';' 'NR>1{sum[$6]+=$5} END{for(i in sum) printf "%s;%.6f\n", i, sum[i]}' ${filePath} >"./temp/d2_argument_sum.csv"
         # sort the value from the second field (length), and only numerical, and reversed to have the longest on top
         echo "Sorting drivers routes..."
-        sort -t';' -k2n "./temp/d2_argument_sum.csv" >"./temp/sorted_d2_argument_sum.csv"
+        sort -t';' -k2nr "./temp/d2_argument_sum.csv" >"./temp/sorted_d2_argument_sum.csv"
         echo "Sorting drivers..."
         # get the top 10 longest route
-        tail -n 10 "./temp/sorted_d2_argument_sum.csv" >"./temp/d2_argument_top10.csv"
+        head -n 10 "./temp/sorted_d2_argument_sum.csv" >"./temp/d2_argument_top10.csv"
          cat "./temp/d2_argument_top10.csv" # to show the top 10
 
         
