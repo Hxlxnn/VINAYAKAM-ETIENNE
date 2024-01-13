@@ -30,7 +30,7 @@ sort -t';' -k2nr "$fichierTop10Pre" >"$fichierTop10"
 cat "$fichierTop10" # Affichage des 10 premiers
 
 #Fin chronomètre
-temps_debut=$(date +%s.%N)
+temps_fin=$(date +%s.%N)
 
 # Calculez la durée de traitement en secondes
 duree_traitement=$(echo "$temps_fin - $temps_debut" | bc)
