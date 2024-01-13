@@ -6,7 +6,8 @@ if [[ ! -f "$cheminFichier" ]]; then
     echo "Le fichier $cheminFichier n'existe pas. Veuillez vérifier le chemin du fichier."
     exit 1
 fi
-
+#Début chronomètre
+temps_debut=$(date +%s.%N)
 # Création des répertoires temporaires
 repertoireTemp="./temp"
 mkdir -p "$repertoireTemp"
@@ -27,6 +28,15 @@ echo "Obtention des 10 conducteurs principaux..."
 head -10 "$fichierTriee" >"$fichierTop10Pre"
 sort -t';' -k2nr "$fichierTop10Pre" >"$fichierTop10"
 cat "$fichierTop10" # Affichage des 10 premiers
+
+#Fin chronomètre
+temps_debut=$(date +%s.%N)
+
+# Calculez la durée de traitement en secondes
+duree_traitement=$(echo "$temps_fin - $temps_debut" | bc)
+
+# Affichez la durée de traitement
+echo "Le traitement d1 a pris $duree_traitement secondes pour s'exécuter."
 
 # Fin du script...
 
