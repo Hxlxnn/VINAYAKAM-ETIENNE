@@ -1,12 +1,12 @@
 #!/usr/bin/gnuplot -persist
-# Définit le titre, les étiquettes des axes x et y, et la sortie
-set title 'Top 10 des conducteurs ayant parcouru la plus grande distance'
-set xlabel 'Distance parcourue (km)'
+# Définit le titre, les étiquettes des axes et la sortie
+set title 'Top 10 des conducteurs avec le plus grand nombre de trajets'
+set xlabel 'Nombre de trajets'
 set ylabel 'Nom'
-set output './images/d2_image.png'
+set output './images/d1_image.png'
 set key noenhanced
 
-# Définit le terminal pour utiliser pngcairo, avec la new roman en taille 0.8
+# Configure le terminal pour utiliser pngcairo, avec la police Times New Roman en taille 20
 # et une taille d'image de 1920x1080
 set terminal pngcairo enhanced font "Times New Roman,20" size 1920,1080
 # Indique que le séparateur de données est le point-virgule dans notre fichier
@@ -27,7 +27,9 @@ set style line 100 lc rgb "grey" lw 0.3
 set grid ls 100
 
 # Configure le style des boîtes (boxes) avec couleur, largeur et bordure
-set style fill solid 1.0 border lt -1
+set style fill solid 1.0 border rgb "#0000FF"
+
+
 
 # Variables pour configurer la largeur des boîtes
 myBoxWidth = 0.5
@@ -40,5 +42,6 @@ set offsets 0,0,myOffset-myBoxWidth/2.,myOffset
 # Nous dessinons des rectangles aux coordonnées données : 0 en X, offset fois la ligne lue,
 # pour la même ligne en X à l'offset vers le haut pour la largeur, la longueur de la valeur des données
 # lc var détermine automatiquement la couleur, notitle masque le titre de couleur différente
-plot './temp/d2_argument_top10.csv' using (myOffset*$2):0:(myOffset*$2):(myBoxWidth/2.):($0+1):ytic(1) with boxxy lc var notitle
+plot './temp/d1_argument_top10.csv' using (myOffset*$2):0:(myOffset*$2):(myBoxWidth/2.):($0+1):ytic(1) with boxxy lc var notitle
+
 
