@@ -4,6 +4,8 @@
 
 typedef struct Etape {
     char ville[50];
+    int pointPassage;
+    int pointDepart;
     struct Etape *gauche;
     struct Etape *droite;
     int hauteur;
@@ -21,10 +23,12 @@ int max(int a, int b) {
     return (a > b) ? a : b;
 }
 
-// Créer un nouveau nœud avec une ville donnée
-Etape *nouvelEtape(char *ville) {
+// Créer un nouveau nœud avec une ville donnée et ses informations associées
+Etape *nouvelEtape(char *ville, int pointPassage, int pointDepart) {
     Etape *et = (Etape *)malloc(sizeof(Etape));
     strcpy(et->ville, ville);
+    et->pointPassage = pointPassage;
+    et->pointDepart = pointDepart;
     et->gauche = et->droite = NULL;
     et->hauteur = 1; // Nouveau nœud a une hauteur de 1
     return et;
@@ -70,15 +74,15 @@ int facteurEquilibre(Etape *N) {
 }
 
 // Insérer un nœud dans un arbre AVL
-Etape *inserer(Etape *racine, char *ville) {
+Etape *inserer(Etape *racine, Etape *nvetape) {
     // Étape d'insertion normale BST
     if (racine == NULL)
-        return nouvelEtape(ville);
+        return nouvelEtape(nvetape->ville, nvetape->pointPassage, nvetape->pointDepart);
 
-    if (strcmp(ville, racine->ville) < 0)
-        racine->gauche = inserer(racine->gauche, ville);
-    else if (strcmp(ville, racine->ville) > 0)
-        racine->droite = inserer(racine->droite, ville);
+    if (strcmp(nvetape->ville, racine->ville) < 0)
+        racine->gauche = inserer(racine->gauche, nvetape);
+    else if (strcmp(nvetape->ville, racine->ville) > 0)
+        racine->droite = inserer(racine->droite, nvetape);
     else // Ne pas permettre les villes en double
         return racine;
 
@@ -89,21 +93,21 @@ Etape *inserer(Etape *racine, char *ville) {
     int equilibre = facteurEquilibre(racine);
 
     // Cas de déséquilibre à gauche gauche
-    if (equilibre > 1 && strcmp(ville, racine->gauche->ville) < 0)
+    if (equilibre > 1 && strcmp(nvetape->ville, racine->gauche->ville) < 0)
         return rotationDroite(racine);
 
     // Cas de déséquilibre à droite droite
-    if (equilibre < -1 && strcmp(ville, racine->droite->ville) > 0)
+    if (equilibre < -1 && strcmp(nvetape->ville, racine->droite->ville) > 0)
         return rotationGauche(racine);
 
     // Cas de déséquilibre à gauche droite
-    if (equilibre > 1 && strcmp(ville, racine->gauche->ville) > 0) {
+    if (equilibre > 1 && strcmp(nvetape->ville, racine->gauche->ville) > 0) {
         racine->gauche = rotationGauche(racine->gauche);
         return rotationDroite(racine);
     }
 
     // Cas de déséquilibre à droite gauche
-    if (equilibre < -1 && strcmp(ville, racine->droite->ville) < 0) {
+    if (equilibre < -1 && strcmp(nvetape->ville, racine->droite->ville) < 0) {
         racine->droite = rotationDroite(racine->droite);
         return rotationGauche(racine);
     }
@@ -115,7 +119,7 @@ Etape *inserer(Etape *racine, char *ville) {
 void afficherAVL(Etape *racine) {
     if (racine != NULL) {
         afficherAVL(racine->gauche);
-        printf("%s\n", racine->ville);
+        printf("%s,%d,%d\n", racine->ville, racine->pointPassage, racine->pointDepart);
         afficherAVL(racine->droite);
     }
 }
@@ -129,36 +133,8 @@ void libererAVL(Etape *racine) {
     }
 }
 
-char* extraireVille(char* ligne) {
-    char* debut = ligne;
-    char* fin = strchr(debut, ',');
-
-    if (fin != NULL) {
-        // Ignorer les espaces après la virgule
-        while (*(fin + 1) == ' ' || *(fin + 1) == '\t') {
-            ++fin;
-        }
-
-        // Calculer la longueur de la ville
-        size_t longueur = fin - debut;
-
-        // Allouer de la mémoire pour la ville
-        char* ville = (char*)malloc(longueur + 1);
-
-        // Copier la ville dans la nouvelle mémoire allouée
-        strncpy(ville, debut, longueur);
-
-        // Ajouter le caractère de fin de chaîne
-        ville[longueur] = '\0';
-
-        return ville;
-    }
-
-    return NULL;
-}
-
 int main() {
-    FILE *fichier = fopen("resultats.txt", "r");
+    FILE *fichier = fopen("temp/resultat.txt", "r");
     if (fichier == NULL) {
         fprintf(stderr, "Impossible d'ouvrir le fichier resultats.txt.\n");
         return 1;
@@ -169,10 +145,11 @@ int main() {
 
     // Lire chaque ligne du fichier
     while (fgets(ligne, sizeof(ligne), fichier) != NULL) {
-        char* ville = extraireVille(ligne);
-        
+        Etape nvetape;
+        sscanf(ligne, "%49[^,],%d,%d", nvetape.ville, &nvetape.pointPassage, &nvetape.pointDepart);
+
         // Insérer la ville dans l'arbre AVL
-        arbreVilles = inserer(arbreVilles, ville);
+        arbreVilles = inserer(arbreVilles, &nvetape);
     }
 
     fclose(fichier);
