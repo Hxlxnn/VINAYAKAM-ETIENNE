@@ -3,6 +3,7 @@
 repertoireTemp="./temp"
 mkdir -p "$repertoireTemp"
 fichier_resultat="$repertoireTemp/resultat.txt"
+fichier_final="$repertoireTemp/t_resultat.csv"
 awk -F";" '
 BEGIN {
     # Définir le séparateur de sortie comme une virgule
@@ -41,6 +42,12 @@ END {
     }
 }
 ' data.csv > "$fichier_resultat"
+#compilation du programme C
+gcc -o t t.c
+
+#exécution du programme C
+./t > "$fichier_final"
 
 
-#RAJOUTER utilisation du programme.c (compilation + exécution)
+#RAJOUTER création courbe
+
