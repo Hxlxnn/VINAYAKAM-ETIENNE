@@ -47,9 +47,23 @@ END {
 #compilation du programme C
 gcc -o t t.c
 
-#exécution du programme C
-./t > "$fichier_final"
-#Fin chronomètre
+# Vérifier si la compilation a réussi
+if [ $? -eq 0 ]; then
+    echo "Compilation réussie. Exécution du programme..."
+
+    # Exécuter le programme C + insertion des dponnées de sortie dans le fichier résultat
+    ./t > "$fichier_final"
+
+    # Vérifier si l'exécution s'est terminée avec succès
+    if [ $? -eq 0 ]; then
+        echo "Exécution réussie. Création du graphe." //création du graphe à rajouter
+    else
+        echo "Erreur lors de l'exécution du programme."
+    fi
+
+else
+    echo "Erreur lors de la compilation du programme C."
+fi
 temps_fin=$(date +%s.%N)
 
 # Calculez la durée de traitement en secondes
