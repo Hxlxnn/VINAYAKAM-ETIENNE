@@ -50,22 +50,32 @@ else
     mkdir -p 'demo'
     echo 'Répertoire "demo" créé.'
 fi
+# Cas du -h
+# Boucle pour parcourir les arguments
+for arg in "$@"
+do
+    # Si l'argument est égal à "-h", alors on affiche l'aide
+    if [ "$arg" == "-h" ]
+    then
+    echo "---------------------------------------------------"
+    echo "Aide : Options possibles"
+    echo "-d1 : Conducteurs avec le plus de trajets"
+    echo "-d2 : Conducteurs et la plus grande distance"
+    echo "-l : Les 10 trajets les plus longs"
+    echo "-t : Les 10 villes les plus traversees "
+    echo "-s : Statistiques sur les etapes"
+    echo "---------------------------------------------------"
+
+    exit 0
+    fi
+
+done
 
 for arg in $*; do
     case $arg in
-    "-test")
-        echo "Testing: 30 routes with all step"
 
-        echo "Start awk"
-        awk -F';' '$1 <=30 {printf "%d;%d;%s;%s\n", $1, $2, $3, $4 }' ${filePath} >"./temp/test_result.txt"
-        echo "Start last sort"
-        sort -t';' -k1n -k2n "./temp/test_result.txt" >"./temp/sorted_test_sorted.txt"
-
-        ExitDisplay ${startTimeCount} "End of the test."
-        ;;
     "-d1")
         
-
 # Vérification de l'existence du fichier
 cheminFichier="data.csv"
 if [[ ! -f "$cheminFichier" ]]; then
