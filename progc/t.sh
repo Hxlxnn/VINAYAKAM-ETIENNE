@@ -4,6 +4,8 @@ repertoireTemp="./temp"
 mkdir -p "$repertoireTemp"
 fichier_resultat="$repertoireTemp/resultat.txt"
 fichier_final="$repertoireTemp/t_resultat.csv"
+#Début chronomètre
+temps_debut=$(date +%s.%N)
 awk -F";" '
 BEGIN {
     # Définir le séparateur de sortie comme une virgule
@@ -47,7 +49,15 @@ gcc -o t t.c
 
 #exécution du programme C
 ./t > "$fichier_final"
+#Fin chronomètre
+temps_fin=$(date +%s.%N)
 
+# Calculez la durée de traitement en secondes
+duree_traitement=$(echo "$temps_fin - $temps_debut" | bc)
+
+
+# Affichez la durée de traitement
+echo "Le traitement t a pris $duree_traitement secondes pour s'exécuter."
 
 #RAJOUTER création courbe
 
