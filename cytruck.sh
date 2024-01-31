@@ -50,6 +50,10 @@ else
     mkdir -p 'demo'
     echo 'Répertoire "demo" créé.'
 fi
+# Vérifie le nombre d'arguments, s'il est nul, quitte
+if [ $# == 0 ]; then
+    echo "Aucun argument trouvé. Utilisez \"-h\" pour obtenir de l'aide."
+fi
 # Cas du -h
 # Boucle pour parcourir les arguments
 for arg in "$@"
