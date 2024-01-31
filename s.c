@@ -144,34 +144,40 @@ void libererAVL(Noeud *racine) {
         free(racine);
     }
 }
-Noeud *NouveauNoeudAVL(Noeud *noeud) {
+Noeud *NouveauNoeudAVL(int id_trajet, float max_trajet, float min_trajet, float moy_trajet) {
 	Noeud *nouveaunoeud = malloc(sizeof(Noeud));
-	nouveaunoeud->id_trajet = noeud->id_trajet;
+	nouveaunoeud->id_trajet = id_trajet;
 	nouveaunoeud->gauche = NULL;
 	nouveaunoeud->droite = NULL;
 	nouveaunoeud->hauteur = 1;
 
 	// Mise à jour des champs en fonction du nouveau nœud
-	nouveaunoeud->max_trajet = noeud->max_trajet;
-	nouveaunoeud->min_trajet = noeud->min_trajet;
-	nouveaunoeud->moy_trajet = noeud->moy_trajet;
-	nouveaunoeud->nb_trajet = noeud->nb_trajet;
+	nouveaunoeud->max_trajet = max_trajet;
+	nouveaunoeud->min_trajet = min_trajet;
+	nouveaunoeud->moy_trajet = moy_trajet;
 	return nouveaunoeud;
 }
 
 	
 // Insérer un nœud dans un arbre AVL trié par max_trajet
-Noeud *insererAVLParMaxTrajet(Noeud *racine, Noeud *nouveauNoeud) {
+Noeud *insererAVLParMaxTrajet(Noeud *racine, int id_trajet, float max_trajet, float min_trajet, float moy_trajet) {
     // insertion normale
-	if (racine == NULL)
-        	return NouveauNoeudAVL(nouveauNoeud);
-
-	if (nouveauNoeud->max_trajet <= racine->max_trajet)
-		racine->gauche = insererAVLParMaxTrajet(racine->gauche, nouveauNoeud);
-	else if (nouveauNoeud->max_trajet > racine->max_trajet)
-		racine->droite = insererAVLParMaxTrajet(racine->droite, nouveauNoeud);
+	if (racine == NULL){
+		//racine=NouveauNoeudAVL(id_trajet,max_trajet,min_trajet,moy_trajet);
+		printf("insertion nouveau noeud\n");
+        	return NouveauNoeudAVL(id_trajet,max_trajet,min_trajet,moy_trajet);
+        }
+	//printf("insertion autre valeur\n");
+	if (max_trajet <= racine->max_trajet){
+		//printf("gauche\n");
+		racine->gauche = insererAVLParMaxTrajet(racine->gauche,id_trajet,max_trajet,min_trajet,moy_trajet);}
+	else{ 
+		if (max_trajet > racine->max_trajet){
+	//printf("Droite\n");
+			racine->droite = insererAVLParMaxTrajet(racine->droite,id_trajet,max_trajet,min_trajet,moy_trajet);}
+		}
    
-
+printf("Noeud inséré\n");
     // Mettre à jour la hauteur du nœud actuel
 	racine->hauteur = 1 + max(hauteur(racine->gauche), hauteur(racine->droite));
 
@@ -179,59 +185,95 @@ Noeud *insererAVLParMaxTrajet(Noeud *racine, Noeud *nouveauNoeud) {
 	int equilibre = facteurEquilibre(racine);
 
     // Cas de déséquilibre à gauche gauche
-	if (equilibre > 1 && nouveauNoeud->max_trajet < racine->gauche->max_trajet)
+	if (equilibre > 1 && max_trajet < racine->gauche->max_trajet)
 		return rotationDroite(racine);
 
     // Cas de déséquilibre à droite droite
-	if (equilibre < -1 && nouveauNoeud->max_trajet > racine->droite->max_trajet)
+	if (equilibre < -1 && max_trajet > racine->droite->max_trajet)
 		return rotationGauche(racine);
 
     // Cas de déséquilibre à gauche droite
-    if (equilibre > 1 && nouveauNoeud->max_trajet > racine->gauche->max_trajet) {
+    if (equilibre > 1 && max_trajet > racine->gauche->max_trajet) {
         racine->gauche = rotationGauche(racine->gauche);
         return rotationDroite(racine);
     }
 
     // Cas de déséquilibre à droite gauche
-    if (equilibre < -1 && nouveauNoeud->max_trajet < racine->droite->max_trajet) {
+    if (equilibre < -1 && max_trajet < racine->droite->max_trajet) {
         racine->droite = rotationDroite(racine->droite);
         return rotationGauche(racine);
     }
 
     return racine; // La racine inchangée si aucun cas de déséquilibre n'est rencontré
 }
- // Parcours en ordre de l'arbre initial et insertion dans le nouvel AVL
-   Noeud *insererDansAVLParMaxTrajet(Noeud *noeud, Noeud *arbreMaxTrajet) {
-   if(arbreMaxTrajet==NULL){
-   return NouveauNoeudAVL(noeud);
-   }
-   else{
-    if (noeud != NULL) {
-        arbreMaxTrajet = insererAVLParMaxTrajet(arbreMaxTrajet, noeud);
-        arbreMaxTrajet = insererDansAVLParMaxTrajet(noeud->gauche, arbreMaxTrajet);
-        arbreMaxTrajet = insererDansAVLParMaxTrajet(noeud->droite, arbreMaxTrajet);
-    }
-    return arbreMaxTrajet;}
-}
 
-
-// Fonction pour créer un nouvel AVL trié par max_trajet
-Noeud *creerAVLParMaxTrajet(Noeud *arbreInitial, Noeud *arbreMaxTrajet) {
-    if (arbreMaxTrajet == NULL) {
-        return insererDansAVLParMaxTrajet(arbreInitial, arbreMaxTrajet);
-    } else {
-        return insererDansAVLParMaxTrajet(arbreInitial, arbreMaxTrajet);
-    }
-}
 
 void afficherAVLDecroissant(Noeud *racine) { //Droite-racine-gauche
     if (racine != NULL) {
         afficherAVLDecroissant(racine->droite);  
-        printf("ID Trajet : %d, Distance max: %.3lf, distance min:%f, moyenne:%f\n", racine->id_trajet, racine->max_trajet, racine->min_trajet, racine->moy_trajet/racine->nb_trajet);
+        printf("ID Trajet : %d, Distance max: %.3lf, distance min:%f, moyenne:%f\n", racine->id_trajet, racine->max_trajet, racine->min_trajet, racine->moy_trajet);
         afficherAVLDecroissant(racine->gauche); 
     }
 }
+// Fonction utilitaire pour afficher l'arbre en ordre et écrire les valeurs dans un fichier
+void afficherEtEcrireDansFichier(Noeud *racine, FILE *fichier) {
+    if (racine != NULL) {
+        // Parcours en ordre : gauche, racine, droite
+        afficherEtEcrireDansFichier(racine->gauche, fichier);
 
+        // Écrire le nœud dans le fichier
+        fprintf(fichier, "%d,%.3lf,%f,%f\n", racine->id_trajet, racine->max_trajet, racine->min_trajet, racine->moy_trajet/racine->nb_trajet);
+
+        // Parcours en ordre : droite
+        afficherEtEcrireDansFichier(racine->droite, fichier);
+    }
+}
+void afficherAVLEtEcrireDansFichier(Noeud *racine, const char *nomFichier) {
+    FILE *nouveauFichier = fopen(nomFichier, "w");
+    
+    if (nouveauFichier == NULL) {
+        fprintf(stderr, "Impossible de créer/ouvrir le fichier %s.\n", nomFichier);
+        return;
+    }
+
+    afficherEtEcrireDansFichier(racine, nouveauFichier);
+
+    // Fermer le fichier
+    fclose(nouveauFichier);
+}
+// Fonction pour lire le fichier et insérer les valeurs dans l'AVL trié par max_trajet
+Noeud* lireFichierEtInsererDansAVL(const char *nomFichier, Noeud *arbreMaxTrajet) {
+    FILE *fichier = fopen(nomFichier, "r");
+
+    if (fichier == NULL) {
+        fprintf(stderr, "Impossible d'ouvrir le fichier %s.\n", nomFichier);
+        return arbreMaxTrajet;
+    }
+
+    char ligne[100];
+
+      // Lire chaque ligne du fichier
+    while (fgets(ligne, sizeof(ligne), fichier) != NULL) {
+        int id_trajet;
+        float max_trajet, min_trajet, moy_trajet;
+
+        // Extraire les données du fichier
+        int result = sscanf(ligne, "%d,%f,%f,%f", &id_trajet, &max_trajet, &min_trajet, &moy_trajet);
+
+        // Vérifier si l'extraction des données a réussi
+        if (result != 4) {
+            fprintf(stderr, "Erreur lors de l'extraction des données de la ligne : %s\n", ligne);
+            continue;  // Ignorer la ligne incorrecte et passer à la suivante
+        }
+	printf("INSERTION D'UN NOUVEAU NOEUD\n");
+        // Insérer le trajet dans l'AVL trié par max_trajet
+        arbreMaxTrajet = insererAVLParMaxTrajet(arbreMaxTrajet, id_trajet, max_trajet, min_trajet, moy_trajet);
+        printf("ELEMENT INSERE\n");
+    }
+    printf("insertion dans l'Avl réussie");
+    fclose(fichier);
+    return arbreMaxTrajet;
+}
 
 int main() {
     FILE *fichier = fopen("data.csv", "r");
@@ -242,6 +284,7 @@ int main() {
 
     char ligne[100];
     Noeud *arbreTrajets = NULL;
+    Noeud *arbreMaxTrajet = NULL;
 
     // Lire chaque ligne du fichier
     while (fgets(ligne, sizeof(ligne), fichier) != NULL) {
@@ -253,29 +296,24 @@ int main() {
 
         // Insérer le trajet dans l'AVL
         arbreTrajets = insererAVL(arbreTrajets, id_trajet, distance_trajet);
-    }
-
-    fclose(fichier);
-
-// Créer un nouvel AVL trié par max_trajet
-    Noeud *arbreMaxTrajet = NULL;
-    arbreMaxTrajet=creerAVLParMaxTrajet(arbreTrajets, arbreMaxTrajet);
-	afficherAVL(arbreTrajets);
-	printf("\n Nouvel AVL!!!!!\n");
+         }
+        // Appeler la fonction pour parcourir l'arbre et insérer dans le fichier
+	afficherAVLEtEcrireDansFichier(arbreTrajets, "output.txt"); // afficher dans l'ordre Id, distance max, distance min, distance moyenne
+	libererAVL(arbreTrajets);
+	fclose(fichier);
+	printf("Premier AVL inséré");
+	arbreMaxTrajet=lireFichierEtInsererDansAVL("output.txt", arbreMaxTrajet);
+	printf("Deuxième AVL inséré");
+	
+	
     // Afficher l'AVL trié par max_trajet
-    afficherAVLDecroissant(arbreMaxTrajet);
+   // afficherAVLDecroissant(arbreMaxTrajet);
 
     // Libérer la mémoire allouée pour les deux arbres
-    libererAVL(arbreTrajets);
-    libererAVL(arbreMaxTrajet);
+    //libererAVL(arbreTrajets);
+    //libererAVL(arbreMaxTrajet);
 
-    // Afficher l'AVL (pour le débogage)
-    //afficherAVL(arbreTrajets);
-
-    
-
-    return 0;
+   return 0;
 }
 
-
-//Régler problème de noeud
+//Trouver l'erreur de segmentation!!!!!
