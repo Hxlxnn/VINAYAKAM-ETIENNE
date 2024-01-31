@@ -1,0 +1,30 @@
+projet cy-trucks 2023-2024
+
+Ce projet implique l'utilisation de Shell et de C, ainsi que l'intégration du logiciel Gnuplot pour générer des graphiques. (PARLER DE COMMENT L'UTILISER AU NIVEAU DE LA COMPILATION) 
+
+Il est composé de :
+- le sujet de l'ensemble du projet.
+- cytruck.sh est le point d'entrée principal du projet.
+-Le dossier temp est l'endroit où des fichiers temporaires seront créés pendant l'exécution.
+-Le fichier progc est le dossier source . Il contient les fichiers C,... Les fichiers compilés seront également présents ici. Il contient également un dossier gnuplot.
+-Le dossier images contient le résultat de la commande.
+-Le dossier demo est l'endroit où il y a des exemples de nos executions
+
+
+
+
+
+CE QUI NOUS MANQUE/ reste a faire :
+-Le dossier data est l'endroit où les fichiers CSV doivent être collés avant d'utiliser le programme.
+-Le makefile 
+-Mettre les images de nos exemples dans démo
+- Vérifier la présence de l'exécutable
+-vérifier que sa pose pas de problémes au niveau des droits (chmod777)
+
+
+Les disfonctionnement rencontré :(OUBLIE PAS DE + DETAILLER LE PROBLEME!!!)
+ traitement-t : nous avons essayer mais en vain... il y a surement des problemes au niveau des doublons que nous n'arrivons pas a améliorer.
+ Cependant nous avons quand meme effectuer le gnuplot avec les valeurs que nous avons trouvés.
+ 
+ traitement -s : POUR L'INSTANT NOUS N'ARRIVONS PAS A REGLER LES PROBLEME DE SEGMENTATION FAULT SUR LE DEUXIEME AVL.
+ UN GNUPLOT A QUAND MEME ETAIT PREPARER.....
