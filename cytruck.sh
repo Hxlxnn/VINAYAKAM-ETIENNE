@@ -115,8 +115,8 @@ gnuplot ./progc/gnuplot/d1.gnu
 
 # Le reste du script
 
+xdg-open "images/d1_image.png"
 
-# Fin chronomètre
 #Fin chronomètre
 temps_fin=$(date +%s.%N)
 
@@ -167,6 +167,7 @@ echo " on peut voir le graphe dans image"
        
 gnuplot ./progc/gnuplot/d2.gnu
 
+xdg-open "images/d2_image.png"
 
 #Fin chronomètre
 temps_fin=$(date +%s.%N)
@@ -217,7 +218,7 @@ cat "./temp/l_argument_top10_finish.csv"
 echo "Création du graphique..."
 echo "le graphe se trouve dans le dossier image" 
 gnuplot ./progc/gnuplot/l.gnu
-# Fin chronomètre
+xdg-open "images/l_image.png"
 #Fin chronomètre
 temps_fin=$(date +%s.%N)
 
@@ -228,12 +229,69 @@ duree_traitement=$(echo "$temps_fin - $temps_debut" | bc)
 echo "Le traitement d1 a pris $duree_traitement secondes pour s'exécuter."
 
 echo -e "Terminé.\n"
-#;;
+;;
+ "-t")
+ 
+
+repertoireTemp="./temp"
+mkdir -p "$repertoireTemp"
+fichier_resultat="$repertoireTemp/resultat.txt"
+fichier_final="$repertoireTemp/t_resultat.csv"
+awk -F";" '
+BEGIN {
+    # Définir le séparateur de sortie comme une virgule
+    OFS = ",";
+}
+{
+    villes[$3]++;
+    villes[$4]++;
+    departs[$3]++;
+}
+END {
+    PROCINFO["sorted_in"] = "@ind_str_asc";  # Utiliser un tableau associatif trié par ordre alphabétique
+    
+    # Créer un tableau pour stocker les résultats
+    # Chaque élément est un tableau [ville, total, depart]
+    for (ville in villes) {
+        total = villes[ville]; # Nombre de fois où la ville apparait dans une ligne du csv
+        depart = departs[ville]; # Nombre de fois que c\‘est une ville de départ
+        villesTriees[ville] = total - depart; # Nombre de fois où la ville est traversée
+    }
+
+    # Trier manuellement les 10 villes les plus traversées
+    for (i = 1; i <= 10; i++) {
+        max = -1;
+        for (ville in villesTriees) {
+            if (villesTriees[ville] > max) {
+                max = villesTriees[ville];
+                maxVille = ville;
+            }
+        }
+        if (maxVille != "") {
+            # print maxVille, villes[maxVille], departs[maxVille];
+            print maxVille, villesTriees[maxVille], departs[maxVille];
+            delete villesTriees[maxVille];
+        }
+    }
+}
+' data.csv > "$fichier_resultat"
+#compilation du programme C
+gcc -o t progc/t.c
+
+
+#exécution du programme C
+
+./progc/t > "$fichier_final"
+cat "./temp/t_resultat.csv"
+gnuplot ./progc/gnuplot/t.gnu
+
+xdg-open "images/t_image.png"
+
+
         ;;
     esac
 done
 
-ExitDisplay $startTimeCount
 
 
 
