@@ -1,6 +1,7 @@
 #!/bin/bash
 
 
+
 # Créer le dossier "images" s'il n'existe pas déjà
 if [ ! -d 'images' ]; then
     # Créer le répertoire
@@ -51,6 +52,11 @@ fi
 if [ $# == 0 ]; then
     echo "Aucun argument trouvé. Utilisez \"-h\" pour obtenir de l'aide."
 fi
+# Vérifier si gnuplot est installé
+if ! command -v gnuplot >/dev/null 2>&1; then
+    ExitDisplay 0 "gnuplot n'a pas pu être trouvé"
+fi
+
 # Cas du -h
 # Boucle pour parcourir les arguments
 for arg in "$@"
@@ -72,6 +78,7 @@ do
 
 done
 
+
 for arg in $*; do
     case $arg in
 
@@ -86,7 +93,8 @@ for arg in $*; do
         
         
 # Chemin vers le fichier de données
-cheminFichier="data.csv"
+repertoiredata="./data"
+cheminFichier="$repertoiredata/data.csv"
 
 if [[ ! -f "$cheminFichier" ]]; then
     echo "Le fichier $cheminFichier n'existe pas. Veuillez vérifier le chemin du fichier."
@@ -143,7 +151,8 @@ echo "Le traitement d1 a pris $duree_traitement secondes pour s'exécuter."
   chmod 777 progc/gnuplot/2.gnu      
 output_dir="./images"
 # Chemin vers le fichier de données
-cheminFichier="data.csv"
+repertoiredata="./data"
+cheminFichier="$repertoiredata/data.csv"
 
 if [[ ! -f "$cheminFichier" ]]; then
     echo "Le fichier $cheminFichier n'existe pas. Veuillez vérifier le chemin du fichier."
@@ -194,8 +203,9 @@ echo "Le traitement d2 a pris $duree_traitement secondes pour s'exécuter."
      
      chmod 777 progc/gnuplot/l.gnu   
 
-# Assurez-vous que le chemin vers votre fichier est correct
-cheminFichier="data.csv"
+# Chemin vers le fichier de données
+repertoiredata="./data"
+cheminFichier="$repertoiredata/data.csv"
 
 if [[ ! -f "$cheminFichier" ]]; then
     echo "Le fichier $cheminFichier n'existe pas. Veuillez vérifier le chemin du fichier."
