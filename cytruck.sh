@@ -257,7 +257,10 @@ chmod 777 progc/gnuplot/t.gnu
 chmod 777 temp/resultat.txt
 chmod 777 temp/resultat.csv
 repertoireTemp="./temp"
-mkdir -p "$repertoireTemp"
+#mkdir -p "$repertoireTemp"
+# Chemin vers le fichier de données
+repertoiredata="./data"
+cheminFichier="$repertoiredata/data.csv"
 fichier_resultat="$repertoireTemp/resultat.txt"
 fichier_final="$repertoireTemp/t_resultat.csv"
 awk -F";" '
@@ -297,23 +300,25 @@ END {
         }
     }
 }
-' data.csv > "$fichier_resultat"
+' $cheminFichier > "$fichier_resultat"
 #compilation du programme C
 gcc -o t progc/t.c
 
 
 #exécution du programme C
 
-./progc/t > "$fichier_final"
+./t > "$fichier_final"
 cat "./temp/t_resultat.csv"
 gnuplot ./progc/gnuplot/t.gnu
 
 xdg-open "images/t_image.png"
-
+rm t
 
         ;;
     esac
 done
+
+
 
 
 
