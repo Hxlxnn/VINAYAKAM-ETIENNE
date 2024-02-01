@@ -28,3 +28,10 @@ Les disfonctionnement rencontré :(OUBLIE PAS DE + DETAILLER LE PROBLEME!!!)
  
  traitement -s : POUR L'INSTANT NOUS N'ARRIVONS PAS A REGLER LES PROBLEME DE SEGMENTATION FAULT SUR LE DEUXIEME AVL.
  UN GNUPLOT A QUAND MEME ETAIT PREPARER.....
+
+Notre organisations :
+13/12/2023: création du git (hylann)
+15/12/2023: Création des traitements d1,d2(céliane)
+18/12/2023: amélioration des traitemnts d1 d2 et création du l(hylann)
+19/12/2023: création des gnuplot pour les  traitement d1 d2 ( céliane)
+
