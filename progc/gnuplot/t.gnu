@@ -31,6 +31,6 @@ set style fill solid border rgb "black"
 set colorbox vertical origin screen 0.9, 0.2 size screen 0.05, 0.6 front noinvert bdefault
 
 # Tracer par groupes de 2 colonnes
-plot './temp/t_resultat.csv' using 2:xtic(1) title "Quantité traversée", \
+plot './progc/temp/t_resultat.csv' using 2:xtic(1) title "Quantité traversée", \
         '' using 3:xtic(1) title "Quantité de départs de route"
 
