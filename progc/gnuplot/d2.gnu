@@ -34,5 +34,5 @@
             unset ytics;set y2tics mirror
             
             #Charger les données depuis le fichier temporaire
-            plot 'temp/d2_argument_top10.csv' using 2:xticlabels(1) axes x1y2 notitle linecolor 9 lt 1
+            plot 'progc/temp/d2_argument_top10.csv' using 2:xticlabels(1) axes x1y2 notitle linecolor 9 lt 1
             
