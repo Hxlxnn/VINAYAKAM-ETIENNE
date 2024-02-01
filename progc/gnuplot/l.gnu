@@ -45,5 +45,5 @@ set style fill solid 1.0 border lc rgb "green"
 set boxwidth 0.5 relativ
 
 # Trace le graphique en utilisant les données du fichier CSV spécifié, avec les boîtes, en utilisant la deuxième colonne pour l'axe x et la première colonne pour l'axe y, avec des étiquettes sur l'axe x.
-plot './temp/l_argument_top10_finish.csv' u (2*$0+1):1:xticlabel(2) with boxes notitle
+plot './progc/temp/l_argument_top10_finish.csv' u (2*$0+1):1:xticlabel(2) with boxes notitle
 
