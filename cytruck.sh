@@ -13,7 +13,7 @@ if [ ! -d 'images' ]; then
 else
     echo 'Le répertoire "images" existe déjà.'
 fi
-
+ cd progc
 # Nettoyer si le dossier temporaire existe, ou le créer s'il n'existe pas déjà
 if [ ! -d './temp' ]; then
     # Créer le répertoire
@@ -32,6 +32,7 @@ elif [ -n "$(ls "./temp/")" ]; then
 else
     echo 'Le répertoire temporaire existe déjà.'
 fi
+cd ..
 
 # Créer le répertoire "data" s'il n'existe pas déjà
 if [ -d "./data" ]; then
@@ -77,6 +78,10 @@ do
     fi
 
 done
+#Initialisation du dossier temporaire
+repertoireTemp="./progc/temp"
+repertoiredata="./data"
+cheminFichier="$repertoiredata/data.csv"
 
 
 for arg in $*; do
@@ -84,17 +89,8 @@ for arg in $*; do
 
     "-d1")
         
-        #Bien donner les droits 
-        chmod 777 progc/gnuplot/d1.gnu
-        chmod 777 temp/d1_argument_sum.csv
-        chmod 777 temp/sorted_d1_argument_sum.csv
-        chmod 777 temp/d1_argument_top10_pre.csv
-        chmod 777 temp/d1_argument_top10.csv
-        
         
 # Chemin vers le fichier de données
-repertoiredata="./data"
-cheminFichier="$repertoiredata/data.csv"
 
 if [[ ! -f "$cheminFichier" ]]; then
     echo "Le fichier $cheminFichier n'existe pas. Veuillez vérifier le chemin du fichier."
@@ -102,9 +98,7 @@ if [[ ! -f "$cheminFichier" ]]; then
 fi
 #Début chronomètre
 temps_debut=$(date +%s.%N)
-# Création des répertoires temporaires
-repertoireTemp="./temp"
-mkdir -p "$repertoireTemp"
+
 
 # Déclaration des chemins des fichiers temporaires
 fichierSomme="$repertoireTemp/d1_argument_sum.csv"
@@ -150,9 +144,6 @@ echo "Le traitement d1 a pris $duree_traitement secondes pour s'exécuter."
     
   chmod 777 progc/gnuplot/2.gnu      
 output_dir="./images"
-# Chemin vers le fichier de données
-repertoiredata="./data"
-cheminFichier="$repertoiredata/data.csv"
 
 if [[ ! -f "$cheminFichier" ]]; then
     echo "Le fichier $cheminFichier n'existe pas. Veuillez vérifier le chemin du fichier."
@@ -203,9 +194,7 @@ echo "Le traitement d2 a pris $duree_traitement secondes pour s'exécuter."
      
      chmod 777 progc/gnuplot/l.gnu   
 
-# Chemin vers le fichier de données
-repertoiredata="./data"
-cheminFichier="$repertoiredata/data.csv"
+
 
 if [[ ! -f "$cheminFichier" ]]; then
     echo "Le fichier $cheminFichier n'existe pas. Veuillez vérifier le chemin du fichier."
@@ -233,11 +222,7 @@ echo "Tri des ID de trajets..."
 head -10 "./temp/sorted_l_argument_sum.csv" >"./temp/l_argument_top10.csv"
 # Et les trier par ID
 sort -t';' -k2nr "./temp/l_argument_top10.csv" >"./temp/l_argument_top10_finish.csv"
-# Pour afficher les 10 premiers
-cat "./temp/l_argument_top10_finish.csv"
-
 echo "Création du graphique..."
-echo "le graphe se trouve dans le dossier image" 
 gnuplot ./progc/gnuplot/l.gnu
 xdg-open "images/l_image.png"
 #Fin chronomètre
@@ -253,16 +238,9 @@ echo -e "Terminé.\n"
 ;;
  "-t")
  
-chmod 777 progc/gnuplot/t.gnu
-chmod 777 temp/resultat.txt
-chmod 777 temp/resultat.csv
-repertoireTemp="./temp"
-#mkdir -p "$repertoireTemp"
-# Chemin vers le fichier de données
-repertoiredata="./data"
-cheminFichier="$repertoiredata/data.csv"
 fichier_resultat="$repertoireTemp/resultat.txt"
-fichier_final="$repertoireTemp/t_resultat.csv"
+fichier_final="./temp/t_resultat.csv"
+
 awk -F";" '
 BEGIN {
     # Définir le séparateur de sortie comme une virgule
@@ -302,25 +280,22 @@ END {
 }
 ' $cheminFichier > "$fichier_resultat"
 #compilation du programme C
-gcc -o t progc/t.c
-
+cd progc
+make t.o
+chmod +x t.o
 
 #exécution du programme C
 
-./t > "$fichier_final"
-cat "./temp/t_resultat.csv"
+./t.o > "$fichier_final"
+cd ..
+cat "./progc/temp/t_resultat.csv"
 gnuplot ./progc/gnuplot/t.gnu
 
 xdg-open "images/t_image.png"
-rm t
 
         ;;
     esac
 done
-
-
-
-
 
 
 
