@@ -34,4 +34,12 @@ Notre organisations :
 15/12/2023: Création des traitements d1,d2(céliane)
 18/12/2023: amélioration des traitemnts d1 d2 et création du l(hylann)
 19/12/2023: création des gnuplot pour les  traitement d1 d2 ( céliane)
+24/12/2023: création gnuplot traitement l (hylann)
+15/01/2024: création du traitement t partie c (hylann)
+18/01/2024: avancement traitement t et réalisation partie shell du t (hylann)
+20/01/2024: creation de cytruck.sh (céliane)
+22/01/2024: gnuplot traitement t (céliane)
+23/01/2024: amélioration cytruck.sh(hylann)
+24/01/2024: création du makefile(céliane et hylann)
+26/01/2024: recherche traitement s(hylann)
 
