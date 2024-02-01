@@ -1,13 +1,10 @@
-all:exec
+all: t.o
 
 t.o: t.c
-	gcc -c t.c-o t.o
+	gcc -o t.o t.c
 	
 s.o: s.c
-	gcc -c s.c -o s.o
-exec: t.o s.o
-	gcc t.o s.o -o exec
+	gcc -o s.o t.c
 	
 clean:
 	rm -f *.o
-	rm -f exec
