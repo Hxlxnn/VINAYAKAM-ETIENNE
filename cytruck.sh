@@ -294,6 +294,14 @@ gnuplot ./progc/gnuplot/t.gnu
 xdg-open "images/t_image.png"
 
         ;;
+
+        "-s")
+
+
+
+
+
+        ;;
     esac
 done
 
