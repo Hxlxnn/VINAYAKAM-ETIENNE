@@ -190,7 +190,11 @@ echo "Le traitement d2 a pris $duree_traitement secondes pour s'exécuter."
    
     
     "-l")
-     
+     cheminFichier="$repertoiredata/data.csv"
+     fichiersomme="$repertoireTemp/l_argument_sum.csv"
+     fichiersommetrie="$repertoireTemp/sorted_l_argument_sum.csv"
+     fichiertrie10="$repertoireTemp/l_argument_top10.csv"
+     fichierfinal="$repertoireTemp/l_argument_top10_finish.csv"
      chmod 777 progc/gnuplot/l.gnu   
 
 
@@ -210,17 +214,17 @@ echo "l arg trouvé"
 
 # Séparer les champs avec ;, créer un tableau sum[route ID] += distance, puis imprimer chaque route ID avec sa somme (avec 3 décimales)
 echo "Somme des distances des trajets..."
-LC_NUMERIC=C awk -F';' 'NR>1{sum[$1]+=$5} END{for(i in sum) printf "%.6f;%s\n", sum[i], i}' ${cheminFichier} >"./temp/l_argument_sum.csv"
+LC_NUMERIC=C awk -F';' 'NR>1{sum[$1]+=$5} END{for(i in sum) printf "%.6f;%s\n", sum[i], i}' ${cheminFichier} >"$fichiersomme"
 
 # Trier les valeurs selon le premier champ (longueur), uniquement numérique, et en ordre inversé pour avoir les plus longues au sommet
 echo "Tri de la longueur des trajets..."
-sort -t';' -k1nr "./temp/l_argument_sum.csv" >"./temp/sorted_l_argument_sum.csv"
+sort -t';' -k1nr "$fichiersomme" >"$fichiersommetrie"
 
 echo "Tri des ID de trajets..."
 # Obtenir les 10 trajets les plus longs
-head -10 "./temp/sorted_l_argument_sum.csv" >"./temp/l_argument_top10.csv"
+head -10 "$fichiersommetrie" >"$fichiertrie10"
 # Et les trier par ID
-sort -t';' -k2nr "./temp/l_argument_top10.csv" >"./temp/l_argument_top10_finish.csv"
+sort -t';' -k2nr "$fichiertrie10" >"$fichierfinal"
 echo "Création du graphique..."
 gnuplot ./progc/gnuplot/l.gnu
 xdg-open "images/l_image.png"
