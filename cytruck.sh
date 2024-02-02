@@ -290,6 +290,7 @@ chmod +x t.o
 #exécution du programme C
 
 ./t.o > "$fichier_final"
+make clear
 cd ..
 cat "./progc/temp/t_resultat.csv"
 gnuplot ./progc/gnuplot/t.gnu
@@ -299,7 +300,19 @@ xdg-open "images/t_image.png"
         ;;
 
         "-s")
+fichier_temp="./temp/s_temp.csv"
+fichier_final="./temp/s_trie.csv"
+#compilation du programme C
+cd progc
+make s.o
+chmod +x s.o
 
+#exécution du programme C
+./s.o> "$fichier_temp"
+head -50 "$fichier_temp">"$fichier_final"
+cd ..
+cat "./progc/temp/s_trie.csv"
+#insérer gnuplot du S
 
 
 
