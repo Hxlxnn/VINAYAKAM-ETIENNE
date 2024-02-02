@@ -141,7 +141,8 @@ echo "Le traitement d1 a pris $duree_traitement secondes pour s'exécuter."
 # Fin du script...
         ;;
     "-d2")
-    
+    fichierTrie="$repertoireTemp/sorted_d2_argument_sum.csv"
+    fichierTop10="$repertoireTemp/d2_argument_top10.csv"
   chmod 777 progc/gnuplot/2.gnu      
 output_dir="./images"
 
@@ -154,9 +155,7 @@ fi
 temps_debut=$(date +%s.%N)
 
 echo "d2 arg trouvé"
-# Besoin de trier par le nom du conducteur
-# Puis ajouter chaque distance
-# Afficher les 10 premiers avec les distances pour créer le graphique
+
 
 # Séparer les champs avec ;, créer un tableau sum[route ID] += distance, puis imprimer chaque route ID avec sa somme (avec 3 décimales)
 echo "Somme des distances par conducteur..."
@@ -164,11 +163,11 @@ LC_NUMERIC=C awk -F';' 'NR>1{sum[$6]+=$5} END{for(i in sum) printf "%s;%.6f\n", 
 
 # Trier les valeurs selon le deuxième champ (longueur), uniquement numérique, et en ordre inversé pour avoir les plus longues au sommet
 echo "Tri des trajets par conducteur..."
-sort -t';' -k2nr "./temp/d2_argument_sum.csv" >"./temp/sorted_d2_argument_sum.csv"
+sort -t';' -k2nr "./temp/d2_argument_sum.csv" >"$fichierTrie"
 
 echo "Tri des conducteurs..."
 # Obtenir les 10 premiers trajets les plus longs
-head -n 10 "./temp/sorted_d2_argument_sum.csv" >"./temp/d2_argument_top10.csv"
+head -n 10 "$fichierTrie" >"$fichierTop10"
 
 cat "./temp/d2_argument_top10.csv" # Affichage des 10 premiers
 
