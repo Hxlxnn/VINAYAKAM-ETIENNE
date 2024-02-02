@@ -66,7 +66,7 @@ do
     if [ "$arg" == "-h" ]
     then
     echo "---------------------------------------------------"
-    echo "Aide : Options possibles"
+    echo "Options possibles:"
     echo "-d1 : Conducteurs avec le plus de trajets"
     echo "-d2 : Conducteurs et la plus grande distance"
     echo "-l : Les 10 trajets les plus longs"
